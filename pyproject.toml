@@ -1,0 +1,30 @@
+[project]
+name = "ecommerce-data-generator"
+version = "0.1.0"
+description = "Add your description here"
+readme = "README.md"
+authors = [
+    { name = "nmkhoi3010", email = "nmkhoi@ux-vn.com" }
+]
+requires-python = ">=3.12"
+dependencies = [
+    "faker>=40.44.0",
+    "psycopg[binary]>=3.2,<4",
+    "python-dotenv>=1,<2",
+    "ruff>=0.17.4",
+]
+
+[project.scripts]
+ecommerce-data-generator = "ecommerce_data_generator:main"
+generate-all = "ecommerce_data_generator.generate_all:main"
+generate-brands = "ecommerce_data_generator.brand:main"
+generate-categories = "ecommerce_data_generator.category:main"
+generate-sellers = "ecommerce_data_generator.seller:main"
+generate-customers = "ecommerce_data_generator.customer:main"
+generate-products = "ecommerce_data_generator.products:main"
+generate-promotions = "ecommerce_data_generator.promotion:main"
+generate-promotion-products = "ecommerce_data_generator.promotion_product:main"
+
+[build-system]
+requires = ["uv_build>=0.13.6,<0.14.0"]
+build-backend = "uv_build"
