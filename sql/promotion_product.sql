@@ -8,5 +8,6 @@ CREATE TABLE IF NOT EXISTS public.promotion_product (
     updated_by VARCHAR(50),
     deleted_at TIMESTAMP,
     deleted_by VARCHAR(50),
-    is_deleted BOOLEAN NOT NULL DEFAULT FALSE
+    is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
+    UNIQUE (promotion_id, product_id)
 );

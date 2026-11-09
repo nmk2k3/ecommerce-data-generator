@@ -37,7 +37,8 @@ These are the default counts. Categories use a fixed hierarchy of 5 parents and
 Each generator commits separately. If `generate-all` fails, earlier successful
 steps remain committed. Running again preserves existing data: brand and category
 names and customer emails or phone numbers are skipped on conflict; other
-records are appended. Promotion-product pairs are unique only within each batch.
+records are appended. Duplicate promotion-product pairs cause an error and roll
+back the entire promotion-product batch.
 
 ## Database commands
 
