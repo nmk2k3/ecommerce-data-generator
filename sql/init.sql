@@ -2,6 +2,7 @@
 
 BEGIN;
 
+-- Create referenced tables first and roll back the entire schema on failure.
 \ir brand.sql
 \ir category.sql
 \ir seller.sql

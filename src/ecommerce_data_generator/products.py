@@ -36,18 +36,17 @@ def generate_products(
 
     start = datetime(2024, 6, 1)
     end = datetime(2024, 12, 31, 23, 59, 59)
+    # Sources created later cannot be referenced by a product in this window.
     categories = [row for row in categories if row[1] <= end]
     brands = [row for row in brands if row[1] <= end]
     sellers = [row for row in sellers if row[1] <= end]
-    for name, rows in (
-        ("level-2 categories", categories),
-        ("brands", brands),
-        ("sellers", sellers),
+    for name, rows, command in (
+        ("level-2 categories", categories, "generate-categories"),
+        ("brands", brands, "generate-brands"),
+        ("sellers", sellers, "generate-sellers"),
     ):
         if not rows:
-            raise ValueError(
-                f"No eligible {name}; create non-deleted records dated in 2024 or earlier first"
-            )
+            raise ValueError(f"No eligible {name}. Run 'uv run {command}' first.")
 
     fake = Faker()
     products: list[Product] = []
@@ -60,6 +59,7 @@ def generate_products(
         while len(product_name) > 200:
             product_name = fake.catch_phrase()
 
+        # A product must exist no earlier than any of its referenced records.
         earliest_created_at = max(
             start, category_created_at, brand_created_at, seller_created_at
         )

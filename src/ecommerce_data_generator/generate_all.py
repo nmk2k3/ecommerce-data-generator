@@ -17,6 +17,7 @@ def main() -> None:
     )
     parser.parse_args()
 
+    # Run dependencies first; each module owns and commits its own transaction.
     for module in (
         brand,
         category,

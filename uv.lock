@@ -10,6 +10,10 @@ dependencies = [
     { name = "faker" },
     { name = "psycopg", extra = ["binary"] },
     { name = "python-dotenv" },
+]
+
+[package.dev-dependencies]
+dev = [
     { name = "ruff" },
 ]
 
@@ -18,8 +22,10 @@ requires-dist = [
     { name = "faker", specifier = ">=40.44.0" },
     { name = "psycopg", extras = ["binary"], specifier = ">=3.2,<4" },
     { name = "python-dotenv", specifier = ">=1,<2" },
-    { name = "ruff", specifier = ">=0.17.4" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "ruff", specifier = ">=0.17.4" }]
 
 [[package]]
 name = "faker"

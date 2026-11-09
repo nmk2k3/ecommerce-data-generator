@@ -31,23 +31,28 @@ def generate_promotion_products(
     end = datetime(2025, 5, 31, 23, 59, 59)
     promotions = [row for row in promotions if row[1] <= end]
     products = [row for row in products if row[1] <= end]
-    if not promotions or not products:
-        raise ValueError(
-            "Create promotions and products dated on or before 2025-05-31 first"
-        )
+    for name, rows, command in (
+        ("promotions", promotions, "generate-promotions"),
+        ("products", products, "generate-products"),
+    ):
+        if not rows:
+            raise ValueError(f"No eligible {name}. Run 'uv run {command}' first.")
     if count > len(promotions) * len(products):
         raise ValueError(
-            "Not enough distinct promotion-product pairs for the requested count"
+            f"Only {len(promotions) * len(products)} distinct pairs available. "
+            "Reduce '--count' or generate more promotions/products."
         )
 
     fake = Faker()
     links: list[PromotionProduct] = []
     now = datetime.now()
+    # Spread links evenly; earlier promotions receive any remainder.
     per_promotion, remainder = divmod(count, len(promotions))
     for index, (promotion_id, promotion_created_at) in enumerate(promotions):
         product_count = per_promotion + (1 if index < remainder else 0)
         if product_count == 0:
             continue
+        # Sampling without replacement prevents duplicate pairs within this batch.
         selected_products = fake.random_elements(
             elements=products, length=product_count, unique=True
         )
@@ -102,6 +107,7 @@ def main() -> None:
         parser.error("--count must be greater than zero")
 
     with get_connection() as connection, connection.cursor() as cursor:
+        # Historical links intentionally include sources that are now soft-deleted.
         cursor.execute(
             "SELECT promotion_id, created_at FROM public.promotion ORDER BY promotion_id"
         )

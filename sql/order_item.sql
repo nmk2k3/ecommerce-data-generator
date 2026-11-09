@@ -14,6 +14,7 @@ CREATE TABLE IF NOT EXISTS public.order_item (
     deleted_by VARCHAR(50),
     is_deleted BOOLEAN NOT NULL DEFAULT FALSE,
     PRIMARY KEY (order_item_id, order_date),
+    -- Copy the order's exact timestamp so the item uses the matching partition.
     FOREIGN KEY (order_id, order_date) REFERENCES public."order"(order_id, order_date),
     CHECK (created_at >= order_date),
     CHECK (updated_at >= created_at),
